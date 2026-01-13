@@ -26,3 +26,24 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+
+
+
+
+app.use(express.urlencoded({ extended: false })); // Add this to handle form data
+app.use(cors());
+
+// --- ROUTES ---
+app.use('/api/users', require('./routes/userRoutes')); // <--- ADD THIS LINE
+
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
