@@ -57,6 +57,45 @@ const generateToken = (id) => {
   });
 };
 
+
+
+// LOGIN
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // 1. Check for user email
+    const user = await User.findOne({ email });
+
+    // 2. Check password
+    // bcrypt.compare(plainText, encryptedHash)
+    if (user && (await bcrypt.compare(password, user.password))) {
+      res.json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400).json({ message: 'Invalid credentials try again!' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private
+const getMe = async (req, res) => {
+  // We have access to req.user because of the middleware!
+  res.status(200).json(req.user);
+};
+
 module.exports = {
-  registerUser,
+  registerUser,loginUser,getMe,
 };

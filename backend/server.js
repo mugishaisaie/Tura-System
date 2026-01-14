@@ -14,7 +14,11 @@ const app = express();
 // Middleware
 app.use(express.json()); // Allows us to accept JSON data in the body
 app.use(cors()); // Enable CORS for all requests
+app.use(express.urlencoded({ extended: false })); // Add this to handle form data
 
+// --- ROUTES ---
+app.use('/api/users', require('./routes/userRoutes')); // <--- ADD THIS LINE
+app.use('/api/properties', require('./routes/propertyRoutes')); // <--- Add this
 // Basic Route to Test
 app.get('/', (req, res) => {
   res.send('API is running...');
@@ -29,21 +33,3 @@ app.listen(PORT, () => {
 
 
 
-
-
-
-app.use(express.urlencoded({ extended: false })); // Add this to handle form data
-app.use(cors());
-
-// --- ROUTES ---
-app.use('/api/users', require('./routes/userRoutes')); // <--- ADD THIS LINE
-
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
